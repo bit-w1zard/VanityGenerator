@@ -1,6 +1,7 @@
 const fs = require("fs");
 const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
 const { DynamoDBDocumentClient, PutCommand } = require("@aws-sdk/lib-dynamodb");
+const { v4: uuidv4 } = require("uuid");
 
 const client = new DynamoDBClient({});
 const dynamo = DynamoDBDocumentClient.from(client);
@@ -91,7 +92,7 @@ module.exports.handler = async (event) => {
       new PutCommand({
         TableName: tableName,
         Item: {
-          id: "1",
+          id: uuidv4(),
           vanity_numbers: "12323",
           numbers: numberVanities,
         },
