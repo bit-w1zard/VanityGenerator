@@ -83,22 +83,27 @@ module.exports.handler = async (event) => {
   console.log("START OF FILE");
 
   const init = async (number) => {
+    console.log(number);
     const vanity = number.substring(6).split("-").join("");
     const vanityNumbers = generateVanityNumbers(vanity);
     const numberVanities = await vanityComputation(number, vanityNumbers);
     console.log(numberVanities);
-
     await dynamo.send(
       new PutCommand({
         TableName: tableName,
         Item: {
-          id: uuidv4(),
+          id: "1",
           vanity_numbers: "12323",
           numbers: numberVanities,
         },
       })
     );
+    console.log("123", numberVanities);
+    return {
+      bestNumber: numberVanities[0],
+      vanityNumbers: numberVanities,
+    };
   };
-
-  init("1-800-224-5489");
+  const number = event["Details"]["Parameters"]["phoneNumber"];
+  init(number);
 };
